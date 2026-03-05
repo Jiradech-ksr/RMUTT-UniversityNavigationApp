@@ -9,7 +9,7 @@ class MapUtils {
     double longitude,
     BuildContext context,
   ) async {
-    // 1. Create Google Maps URL
+    // 1. Create the official Google Maps search URL using the coordinates
     final Uri googleUrl = Uri.parse(
       'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude',
     );
