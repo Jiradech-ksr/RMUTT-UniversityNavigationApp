@@ -44,7 +44,9 @@ class HistoryService {
     if (email == null) return [];
 
     try {
-      final uri = Uri.parse('${ApiConstants.getHistory}?email=$email');
+      final uri = Uri.parse(
+        '${ApiConstants.getHistory}?email=${Uri.encodeComponent(email)}',
+      );
       print("History: Fetching from $uri");
 
       final response = await http.get(uri);

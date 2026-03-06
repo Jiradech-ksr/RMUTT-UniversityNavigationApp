@@ -96,37 +96,42 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ],
               ),
             )
-          : ListView.separated(
+          : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: _history.length,
-              separatorBuilder: (ctx, i) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final Location loc = _history[index];
-                return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.indigo.shade50,
-                    child: const Icon(Icons.history, color: Colors.indigo),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.indigo.shade50,
+                      child: const Icon(Icons.history, color: Colors.indigo),
+                    ),
+                    title: Text(
+                      loc.name,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text(
+                      '${loc.departmentName ?? 'Unknown'} • Room ${loc.roomNumber ?? '-'}',
+                    ),
+                    trailing: const Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(location: loc),
+                        ),
+                      ).then((_) => _loadHistory());
+                    },
                   ),
-                  title: Text(
-                    loc.name,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: Text(
-                    '${loc.departmentName ?? 'Unknown'} • Room ${loc.roomNumber ?? '-'}',
-                  ),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsScreen(location: loc),
-                      ),
-                    ).then((_) => _loadHistory());
-                  },
                 );
               },
             ),

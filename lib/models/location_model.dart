@@ -26,12 +26,12 @@ class Location {
   });
 
   factory Location.fromJson(Map<String, dynamic> json) {
-    // 1. Process Image URL
+    // 1. Process Image URL dynamically to support relative paths
     String? rawImageUrl = json['image_url'];
     String? fullImageUrl;
     if (rawImageUrl != null && rawImageUrl.isNotEmpty) {
       fullImageUrl = rawImageUrl.startsWith('http')
-          ? rawImageUrl // Fallback for old test data
+          ? rawImageUrl
           : '${ApiConstants.baseAppUrl}/$rawImageUrl';
     }
 
@@ -52,11 +52,11 @@ class Location {
       longitude: double.tryParse(json['longitude'].toString()) ?? 0.0,
       departmentName: json['department_name'] ?? json['building_name'],
       imageUrl: fullImageUrl, // Use the processed URL
-      roomNumber: json['room_number'],
+      roomNumber: json['room_number']?.toString(), // FIX: Added ?.toString()
       floor: json['floor'] != null
           ? int.tryParse(json['floor'].toString())
           : null,
-      floorLayoutUrl: fullLayoutUrl, // Use the processed URL
+      floorLayoutUrl: fullLayoutUrl,
     );
   }
 }
