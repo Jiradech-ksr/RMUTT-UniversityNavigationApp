@@ -24,7 +24,11 @@ class HistoryService {
 
       final response = await http.post(
         Uri.parse(ApiConstants.addHistory),
-        body: {'email': email, 'room_id': location.id.toString()},
+        body: {
+          'email': email,
+          'location_id': location.id.toString(),
+          'location_type': location.type,
+        },
       );
 
       print("History Add Response: ${response.statusCode} - ${response.body}");

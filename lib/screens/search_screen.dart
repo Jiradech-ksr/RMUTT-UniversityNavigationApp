@@ -42,9 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  // ... (Keep _handleNavigation, dispose, _hasMatch logic exactly the same) ...
   Future<void> _handleNavigation(Map<String, dynamic> data) async {
-    // (Paste your existing logic here)
     final double lat = double.tryParse(data['lat']?.toString() ?? '0.0') ?? 0.0;
     final double lng = double.tryParse(data['lng']?.toString() ?? '0.0') ?? 0.0;
     if (lat == 0.0 || lng == 0.0) return;
@@ -52,7 +50,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final location = Location(
       id: int.tryParse(data['id']?.toString() ?? '0') ?? 0,
       name: data['title'] ?? 'Unknown',
-      type: data['type'] ?? 'Unknown',
+      type: 'Building',
       latitude: lat,
       longitude: lng,
       departmentName: 'Search Result',
@@ -60,6 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
       roomNumber: data['room_number']?.toString(),
       floor: int.tryParse(data['floor']?.toString() ?? '1'),
     );
+
     await HistoryService.addToHistory(location);
     if (mounted) await MapUtils.openMap(lat, lng, context);
   }

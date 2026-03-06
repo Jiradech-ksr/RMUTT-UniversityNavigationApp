@@ -30,6 +30,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     _checkIfFavorite();
+    if (widget.location != null) {
+      HistoryService.addToHistory(widget.location!);
+    }
   }
 
   Future<void> _checkIfFavorite() async {
