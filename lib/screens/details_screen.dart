@@ -259,8 +259,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             borderRadius: BorderRadius.circular(12),
                             child: InteractiveViewer(
                               child: Image.network(
-                                // เชื่อม serverUrl เข้ากับ path ของรูป
-                                '$serverUrl/${widget.location!.floorLayoutUrl!}',
+                                widget.location!.floorLayoutUrl!,
                                 fit: BoxFit.contain,
                                 errorBuilder: (context, error, stackTrace) =>
                                     const Center(
@@ -308,8 +307,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                   clipBehavior: Clip.antiAlias,
                                   child: Image.network(
-                                    // เชื่อม serverUrl เข้ากับ path ของรูป
-                                    '$serverUrl/${widget.location!.imageUrl!}',
+                                    widget.location!.imageUrl!,
                                     fit: BoxFit.cover,
                                     errorBuilder: (ctx, err, stack) =>
                                         const Center(
@@ -348,8 +346,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     if (widget.location?.imageUrl != null &&
         widget.location!.imageUrl!.isNotEmpty) {
       return Image.network(
-        // เชื่อม serverUrl เข้ากับ path ของรูป
-        '$serverUrl/${widget.location!.imageUrl!}',
+        widget.location!.imageUrl!, // Removed $serverUrl/
         height: 250,
         width: double.infinity,
         fit: BoxFit.cover,

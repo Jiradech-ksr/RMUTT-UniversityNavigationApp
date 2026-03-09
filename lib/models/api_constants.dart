@@ -1,7 +1,6 @@
 class ApiConstants {
-  // static const String baseUrl = 'http://10.145.161.170/UniversityNavigationWebApp/api';
   static const String baseUrl =
-      'https://qrevb-2403-6200-88a4-1521-cda8-1a1f-b1d4-9707.a.free.pinggy.link/UniversityNavigationWebApp/api';
+      'https://qohst-2403-6200-88a2-a177-cda8-1a1f-b1d4-9707.a.free.pinggy.link/UniversityNavigationWebApp/api';
 
   /// The base URL of the web server (without 'api' at the end)
   static String get baseAppUrl => baseUrl.replaceAll(RegExp(r'/api/?$'), '');
