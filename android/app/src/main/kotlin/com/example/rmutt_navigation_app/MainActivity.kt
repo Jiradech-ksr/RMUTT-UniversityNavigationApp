@@ -1,4 +1,4 @@
-package com.jiradech.universitynavigationapp
+package com.jiradech.rmutt_navigation_app
 
 import io.flutter.embedding.android.FlutterActivity
 

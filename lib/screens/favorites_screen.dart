@@ -1,5 +1,5 @@
-import 'package:universitynavigationapp/models/api_constants.dart';
-import 'package:universitynavigationapp/services/user_session.dart';
+import 'package:rmutt_navigation_app/models/api_constants.dart';
+import 'package:rmutt_navigation_app/services/user_session.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "universitynavigationapp" "\0"
+            VALUE "FileDescription", "RMUTT Navigation App" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "universitynavigationapp" "\0"
+            VALUE "InternalName", "rmutt_navigation_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "universitynavigationapp.exe" "\0"
-            VALUE "ProductName", "universitynavigationapp" "\0"
+            VALUE "OriginalFilename", "rmutt_navigation_app.exe" "\0"
+            VALUE "ProductName", "RMUTT Navigation App" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

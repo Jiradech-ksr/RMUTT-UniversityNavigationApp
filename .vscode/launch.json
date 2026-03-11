@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "universitynavigationapp",
+            "name": "rmutt_navigation_app",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "universitynavigationapp (profile mode)",
+            "name": "rmutt_navigation_app (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "universitynavigationapp (release mode)",
+            "name": "rmutt_navigation_app (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

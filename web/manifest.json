@@ -1,6 +1,6 @@
 {
-    "name": "universitynavigationapp",
-    "short_name": "universitynavigationapp",
+    "name": "RMUTT Navigation App",
+    "short_name": "RMUTT Navigation App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

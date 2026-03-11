@@ -1,4 +1,4 @@
-import 'package:universitynavigationapp/models/api_constants.dart';
+import 'package:rmutt_navigation_app/models/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'details_screen.dart';
 import '../models/location_model.dart';
