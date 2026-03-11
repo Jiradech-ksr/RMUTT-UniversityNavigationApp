@@ -26,7 +26,7 @@ class MapUtils {
         }
       }
     } catch (e) {
-      print("Error launching map: $e");
+      debugPrint("Error launching map: $e");
     }
   }
 }

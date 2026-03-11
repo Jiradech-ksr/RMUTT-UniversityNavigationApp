@@ -1,6 +1,6 @@
 class ApiConstants {
   static const String baseUrl =
-      'https://yqsjl-49-49-218-181.a.free.pinggy.link/rmutt_navigation/api';
+      'https://county-darwin-jumping-from.trycloudflare.com/rmutt_navigation/api';
 
   /// The base URL of the web server (without 'api' at the end)
   static String get baseAppUrl => baseUrl.replaceAll(RegExp(r'/api/?$'), '');

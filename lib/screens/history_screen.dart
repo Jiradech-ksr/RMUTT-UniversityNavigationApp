@@ -119,8 +119,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     subtitle: Text(
                       AppLanguage.current == 'TH'
                           ? (loc.departmentNameTh ?? 'Unknown')
-                          : (loc.departmentNameEn ?? 'Unknown') +
-                                ' • Room ${loc.roomNumber ?? '-'}',
+                          : '${loc.departmentNameEn ?? 'Unknown'} • Room ${loc.roomNumber ?? '-'}',
                     ),
                     trailing: const Icon(
                       Icons.chevron_right,

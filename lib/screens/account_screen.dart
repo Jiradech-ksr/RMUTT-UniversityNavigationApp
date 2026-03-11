@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../services/user_session.dart';
+import '../models/location_model.dart';
 import 'stats_screen.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -129,6 +130,42 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
 
                 const SizedBox(height: 40),
+
+                // --- LANGUAGE SWITCHER ---
+                ListTile(
+                  leading: const Icon(Icons.language, color: Colors.blueAccent),
+                  title: const Text("App Language"),
+                  subtitle: Text(AppLanguage.current == 'EN' ? "English" : "ภาษาไทย"),
+                  trailing: Switch(
+                    value: AppLanguage.current == 'TH',
+                    onChanged: (bool isThai) {
+                      setState(() {
+                        AppLanguage.current = isThai ? 'TH' : 'EN';
+                      });
+                      
+                      // Show snackbar message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            AppLanguage.current == 'EN' 
+                              ? 'Language changed to English' 
+                              : 'เปลี่ยนภาษาเป็นภาษาไทยแล้ว',
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                  ),
+                  tileColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                const SizedBox(height: 16),
 
                 // --- STATS BUTTON ---
                 if (!_isGuest) ...[

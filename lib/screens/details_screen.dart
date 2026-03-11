@@ -30,7 +30,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     _checkIfFavorite();
-    if (widget.location != null) {
+    
+    // Automatic Room Visit Recording
+    if (widget.location != null && widget.location!.type.toLowerCase() == 'room') {
       HistoryService.addToHistory(widget.location!);
     }
   }
@@ -120,7 +122,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<void> _onNavigatePressed() async {
     if (widget.location == null) return;
-    await HistoryService.addToHistory(widget.location!);
+    
+    // Explicit Building Navigation Recording
+    if (widget.location!.type.toLowerCase() == 'building') {
+      await HistoryService.addToHistory(widget.location!);
+    }
+    
     if (mounted) {
       await MapUtils.openMap(
         widget.location!.latitude,
@@ -347,10 +354,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
   // ส่วนแสดงรูปภาพหน้าปกด้านบนสุด
   // ==========================================
   Widget _buildHeaderImage() {
-    if (widget.location?.imageUrl != null &&
-        widget.location!.imageUrl!.isNotEmpty) {
+    String? headerImageUrl = widget.location?.buildingImageUrl ?? widget.location?.imageUrl;
+    
+    if (headerImageUrl != null && headerImageUrl.isNotEmpty) {
       return Image.network(
-        widget.location!.imageUrl!, // Removed $serverUrl/
+        headerImageUrl,
         height: 250,
         width: double.infinity,
         fit: BoxFit.cover,

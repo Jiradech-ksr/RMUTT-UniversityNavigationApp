@@ -36,13 +36,13 @@ class _StatsScreenState extends State<StatsScreen> {
     }
 
     try {
-      print("Fetching stats for: $email"); // Debug print
+      debugPrint("Fetching stats for: $email"); // Debug print
 
       final response = await http.get(
         Uri.parse('${ApiConstants.getUserStats}?email=$email'),
       );
 
-      print(
+      debugPrint(
         "Stats Response: ${response.statusCode} - ${response.body}",
       ); // Debug print
 
@@ -59,11 +59,11 @@ class _StatsScreenState extends State<StatsScreen> {
         }
       } else {
         // ERROR: Stop loading if server fails
-        print("Server Error: ${response.statusCode}");
+        debugPrint("Server Error: ${response.statusCode}");
         if (mounted) setState(() => _isLoading = false);
       }
     } catch (e) {
-      print("Error fetching stats: $e");
+      debugPrint("Error fetching stats: $e");
       // ERROR: Stop loading if connection fails
       if (mounted) setState(() => _isLoading = false);
     }

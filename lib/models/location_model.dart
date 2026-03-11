@@ -19,6 +19,7 @@ class Location {
   final String? roomNumber;
   final int? floor;
   final String? floorLayoutUrl;
+  final String? buildingImageUrl;
 
   Location({
     required this.id,
@@ -33,6 +34,7 @@ class Location {
     this.roomNumber,
     this.floor,
     this.floorLayoutUrl,
+    this.buildingImageUrl,
   });
 
   // Smart getter that returns the correct language automatically
@@ -59,6 +61,14 @@ class Location {
           : '${ApiConstants.baseAppUrl}/$rawLayoutUrl';
     }
 
+    String? rawBuildingImageUrl = json['building_image_url'];
+    String? fullBuildingImageUrl;
+    if (rawBuildingImageUrl != null && rawBuildingImageUrl.isNotEmpty) {
+      fullBuildingImageUrl = rawBuildingImageUrl.startsWith('http')
+          ? rawBuildingImageUrl
+          : '${ApiConstants.baseAppUrl}/$rawBuildingImageUrl';
+    }
+
     return Location(
       id: int.parse(json['id'].toString()),
       // Note: check for name_en OR title_en depending on which API is calling this
@@ -75,6 +85,7 @@ class Location {
           ? int.tryParse(json['floor'].toString())
           : null,
       floorLayoutUrl: fullLayoutUrl,
+      buildingImageUrl: fullBuildingImageUrl,
     );
   }
 }

@@ -218,6 +218,7 @@ class _SearchScreenState extends State<SearchScreen> {
               roomNumber: data['room_number']?.toString(),
               floor: floor,
               floorLayoutUrl: data['floor_layout_url'],
+              buildingImageUrl: data['building_image_url'],
             );
 
             Navigator.push(
