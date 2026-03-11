@@ -49,11 +49,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
     final location = Location(
       id: int.tryParse(data['id']?.toString() ?? '0') ?? 0,
-      name: data['title'] ?? 'Unknown',
+      nameEn: data['title_en'] ?? 'Unknown',
+      nameTh: data['title_th'] ?? 'Unknown',
       type: 'Building',
       latitude: lat,
       longitude: lng,
-      departmentName: 'Search Result',
+      departmentNameEn: 'Search Result',
+      departmentNameTh: 'ค้นหา',
       imageUrl: data['image_url'],
       roomNumber: data['room_number']?.toString(),
       floor: int.tryParse(data['floor']?.toString() ?? '1'),
@@ -71,10 +73,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   bool _hasMatch(Map<String, dynamic> data, String query) {
     if (query.isEmpty) return false;
-    final title = data['title'].toString().toLowerCase();
+    final titleEn = data['title_en'].toString().toLowerCase();
+    final titleTh = data['title_th'].toString().toLowerCase();
     final roomNumber = data['room_number']?.toString().toLowerCase() ?? '';
     final searchLower = query.toLowerCase();
-    if (title.contains(searchLower) || roomNumber.contains(searchLower)) {
+
+    // Search in both English and Thai!
+    if (titleEn.contains(searchLower) ||
+        titleTh.contains(searchLower) ||
+        roomNumber.contains(searchLower)) {
       return true;
     }
     if (data.containsKey('children')) {
@@ -117,7 +124,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 return _buildTreeItem(
                   _campusHierarchy[index],
                   forceShow: false,
-                  parentName: 'RMUTT',
+                  parentNameEn: 'RMUTT',
+                  parentNameTh: 'ราชมงคลธัญบุรี',
                 );
               },
             ),
@@ -127,27 +135,39 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildTreeItem(
     Map<String, dynamic> data, {
     bool forceShow = false,
-    String parentName = 'RMUTT',
+    String parentNameEn = 'RMUTT',
+    String parentNameTh = 'ราชมงคลธัญบุรี',
   }) {
-    // ... (Keep your matching logic) ...
+    // Determine which string to show based on global language
+    String displayTitle = AppLanguage.current == 'TH'
+        ? (data['title_th'] ?? data['title_en'] ?? 'Unknown')
+        : (data['title_en'] ?? 'Unknown');
+
     bool selfMatches =
         _searchQuery.isNotEmpty &&
-        (data['title'].toString().toLowerCase().contains(
-              _searchQuery.toLowerCase(),
-            ) ||
+        ((data['title_en']?.toString().toLowerCase().contains(
+                  _searchQuery.toLowerCase(),
+                ) ??
+                false) ||
+            (data['title_th']?.toString().toLowerCase().contains(
+                  _searchQuery.toLowerCase(),
+                ) ??
+                false) ||
             (data['room_number']?.toString().toLowerCase().contains(
                   _searchQuery.toLowerCase(),
                 ) ??
                 false));
+
     bool shouldShow =
         _searchQuery.isEmpty ||
         forceShow ||
         selfMatches ||
         _hasMatch(data, _searchQuery);
-    if (!shouldShow) return const SizedBox.shrink();
-    bool passForceShow = forceShow || selfMatches;
 
-    // --- ROOM STYLE (Cleaner) ---
+    if (!shouldShow) return const SizedBox.shrink();
+
+    bool passForceShow = forceShow || selfMatches;
+    // --- ROOM STYLE ---
     if (data['type'] == 'room') {
       return Container(
         margin: const EdgeInsets.only(left: 12, bottom: 8),
@@ -168,15 +188,16 @@ class _SearchScreenState extends State<SearchScreen> {
           dense: true,
           leading: const Icon(Icons.meeting_room, color: Colors.indigo),
           title: Text(
-            data['title'] ?? 'Unknown',
+            displayTitle,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            'Room ${data['room_number'] ?? '-'} • Floor ${data['floor'] ?? '-'}',
+            AppLanguage.current == 'TH'
+                ? 'ห้อง ${data['room_number'] ?? '-'} • ชั้น ${data['floor'] ?? '-'}'
+                : 'Room ${data['room_number'] ?? '-'} • Floor ${data['floor'] ?? '-'}',
           ),
           trailing: const Icon(Icons.chevron_right, color: Colors.grey),
           onTap: () {
-            // ... (Keep your onTap logic) ...
             int roomId = int.tryParse(data['id']?.toString() ?? '0') ?? 0;
             int floor = int.tryParse(data['floor']?.toString() ?? '1') ?? 1;
             double lat =
@@ -186,16 +207,19 @@ class _SearchScreenState extends State<SearchScreen> {
 
             final location = Location(
               id: roomId,
-              name: data['title'] ?? 'Unknown',
+              nameEn: data['title_en'] ?? 'Unknown',
+              nameTh: data['title_th'] ?? 'ไม่ระบุ',
               type: 'Room',
               latitude: lat,
               longitude: lng,
-              departmentName: parentName,
+              departmentNameEn: parentNameEn,
+              departmentNameTh: parentNameTh,
               imageUrl: data['image_url'],
               roomNumber: data['room_number']?.toString(),
               floor: floor,
               floorLayoutUrl: data['floor_layout_url'],
             );
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -219,29 +243,36 @@ class _SearchScreenState extends State<SearchScreen> {
       child: ExpansionTile(
         shape: const Border(),
         collapsedShape: const Border(),
-        key: Key('${data['title']}_$_searchQuery'),
+        // FIX: Changed data['title'] to data['id'] to prevent null key errors
+        key: Key('${data['id']}_$_searchQuery'),
         initiallyExpanded: shouldExpand,
         leading: CircleAvatar(
           backgroundColor: Colors.indigo.shade50,
           child: Icon(_getIconForType(data['type']), color: Colors.indigo),
         ),
         title: Text(
-          data['title'],
+          displayTitle,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: data['type'] == 'building'
             ? GestureDetector(
                 onTap: () => _handleNavigation(data),
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
-                      "Navigate",
-                      style: TextStyle(
+                      AppLanguage.current == 'TH'
+                          ? "นำทาง"
+                          : "Navigate", // Bonus: translated the navigate button!
+                      style: const TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Icon(Icons.arrow_forward, size: 14, color: Colors.blue),
+                    const Icon(
+                      Icons.arrow_forward,
+                      size: 14,
+                      color: Colors.blue,
+                    ),
                   ],
                 ),
               )
@@ -251,7 +282,8 @@ class _SearchScreenState extends State<SearchScreen> {
           return _buildTreeItem(
             child,
             forceShow: passForceShow,
-            parentName: data['title'],
+            parentNameEn: data['title_en'] ?? 'RMUTT',
+            parentNameTh: data['title_th'] ?? 'ราชมงคลธัญบุรี',
           );
         }).toList(),
       ),

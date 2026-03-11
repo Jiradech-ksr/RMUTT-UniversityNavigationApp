@@ -136,7 +136,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     onTap: () {
                       final location = Location(
                         id: int.parse(fav['id'].toString()),
-                        name: fav['name'],
+                        nameEn: fav['name_en'],
+                        nameTh: fav['name_th'],
                         type: 'Room',
                         latitude:
                             double.tryParse(
@@ -148,7 +149,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               fav['longitude']?.toString() ?? '0.0',
                             ) ??
                             0.0,
-                        departmentName: fav['building_name'],
+
+                        departmentNameEn: fav['department_name_en'],
+                        departmentNameTh: fav['department_name_th'],
                         roomNumber: fav['room_number'],
                         floor: int.tryParse(fav['floor'].toString()),
                         imageUrl: fav['image_url'],

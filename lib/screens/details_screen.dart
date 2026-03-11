@@ -132,8 +132,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String title = widget.location?.name ?? 'Unknown Room';
-    final String buildingInfo = widget.location?.departmentName ?? 'RMUTT';
+    final String title = AppLanguage.current == 'TH'
+        ? (widget.location?.nameTh ?? 'Unknown Room')
+        : (widget.location?.nameEn ?? 'Unknown Room');
+    final String buildingInfo = AppLanguage.current == 'TH'
+        ? (widget.location?.departmentNameTh ?? 'RMUTT')
+        : (widget.location?.departmentNameEn ?? 'RMUTT');
     final String type = widget.location?.type ?? 'room';
     final String floor = widget.location?.floor?.toString() ?? '-';
     final String roomId = widget.location?.roomNumber ?? '-';
