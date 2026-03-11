@@ -105,9 +105,7 @@ class _ReportScreenState extends State<ReportScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLanguage.current == 'TH'
-                    ? (widget.location.nameTh ?? 'Unknown Room')
-                    : (widget.location.nameEn ?? 'Unknown Room'),
+                widget.location.localizedName,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

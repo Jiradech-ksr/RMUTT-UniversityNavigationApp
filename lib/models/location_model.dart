@@ -1,5 +1,4 @@
 import 'api_constants.dart';
-import 'api_constants.dart';
 
 // Simple global class to manage language state
 class AppLanguage {

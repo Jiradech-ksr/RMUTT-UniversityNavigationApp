@@ -113,9 +113,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       child: const Icon(Icons.history, color: Colors.indigo),
                     ),
                     title: Text(
-                      AppLanguage.current == 'TH'
-                          ? (loc.nameTh ?? 'Unknown Room')
-                          : (loc.nameEn ?? 'Unknown Room'),
+                      loc.localizedName,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(
