@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:rmutt_navigation_app/models/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'details_screen.dart';
@@ -17,6 +18,25 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = "";
+  String _nlpEntity = "";
+  Timer? _debounce;
+
+  Future<void> _fetchNlpEntity(String query) async {
+    try {
+      final url = '${ApiConstants.baseUrl}/NLP/search.php?query=${Uri.encodeComponent(query)}';
+      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 2));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['entity'] != null && mounted) {
+          setState(() {
+            _nlpEntity = data['entity'].toString().toLowerCase();
+          });
+        }
+      }
+    } catch (_) {
+      // Fail silently, fallback to standard text search
+    }
+  }
   bool _isLoading = true;
   List<dynamic> _campusHierarchy = [];
 
@@ -67,6 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -81,7 +102,11 @@ class _SearchScreenState extends State<SearchScreen> {
     // Search in both English and Thai!
     if (titleEn.contains(searchLower) ||
         titleTh.contains(searchLower) ||
-        roomNumber.contains(searchLower)) {
+        roomNumber.contains(searchLower) ||
+        (_nlpEntity.isNotEmpty && 
+         (titleEn.contains(_nlpEntity) || 
+          titleTh.contains(_nlpEntity) || 
+          roomNumber.contains(_nlpEntity)))) {
       return true;
     }
     if (data.containsKey('children')) {
@@ -104,7 +129,16 @@ class _SearchScreenState extends State<SearchScreen> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: TextField(
               controller: _searchController,
-              onChanged: (value) => setState(() => _searchQuery = value),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                  _nlpEntity = "";
+                });
+                if (_debounce?.isActive ?? false) _debounce!.cancel();
+                _debounce = Timer(const Duration(milliseconds: 500), () {
+                  if (value.isNotEmpty) _fetchNlpEntity(value);
+                });
+              },
               decoration: InputDecoration(
                 hintText: AppLanguage.current == 'TH' ? 'ค้นหาอาคาร, ห้อง...' : 'Search Buildings, Rooms...',
                 prefixIcon: const Icon(Icons.search),
@@ -157,7 +191,11 @@ class _SearchScreenState extends State<SearchScreen> {
             (data['room_number']?.toString().toLowerCase().contains(
                   _searchQuery.toLowerCase(),
                 ) ??
-                false));
+                false) ||
+            (_nlpEntity.isNotEmpty &&
+                ((data['title_en']?.toString().toLowerCase().contains(_nlpEntity) ?? false) ||
+                 (data['title_th']?.toString().toLowerCase().contains(_nlpEntity) ?? false) ||
+                 (data['room_number']?.toString().toLowerCase().contains(_nlpEntity) ?? false))));
 
     bool shouldShow =
         _searchQuery.isEmpty ||
