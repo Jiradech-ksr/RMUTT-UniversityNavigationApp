@@ -39,7 +39,7 @@ class _ReportScreenState extends State<ReportScreen> {
     if (await UserSession.isGuest()) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please login to report issues')),
+        SnackBar(content: Text(AppLanguage.current == 'TH' ? 'กรุณาเข้าสู่ระบบเพื่อรายงานปัญหา' : 'Please login to report issues')),
       );
       return;
     }
@@ -67,8 +67,8 @@ class _ReportScreenState extends State<ReportScreen> {
       if (response.statusCode == 200) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Report submitted successfully!'),
+            SnackBar(
+              content: Text(AppLanguage.current == 'TH' ? 'ส่งรายงานเรียบร้อยแล้ว!' : 'Report submitted successfully!'),
               backgroundColor: Colors.green,
             ),
           );
@@ -92,10 +92,7 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Report Issue"),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
+        title: Text(AppLanguage.current == 'TH' ? "รายงานปัญหา" : "Report Issue"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -112,7 +109,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text("Issue Type"),
+              Text(AppLanguage.current == 'TH' ? "ประเภทปัญหา" : "Issue Type"),
               DropdownButtonFormField<String>(
                 value: _issueType,
                 items:
@@ -132,19 +129,19 @@ class _ReportScreenState extends State<ReportScreen> {
                 onChanged: (val) => setState(() => _issueType = val!),
               ),
               const SizedBox(height: 20),
-              const Text("Description"),
+              Text(AppLanguage.current == 'TH' ? "รายละเอียด" : "Description"),
               TextFormField(
                 controller: _descController,
                 maxLines: 3,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Describe the problem...",
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: AppLanguage.current == 'TH' ? "อธิบายปัญหา..." : "Describe the problem...",
                 ),
                 validator: (val) =>
-                    val!.isEmpty ? "Please enter description" : null,
+                    val!.isEmpty ? (AppLanguage.current == 'TH' ? "กรุณากรอกรายละเอียด" : "Please enter description") : null,
               ),
               const SizedBox(height: 20),
-              const Text("Attach Image (Optional)"),
+              Text(AppLanguage.current == 'TH' ? "แนบรูปภาพ (ไม่บังคับ)" : "Attach Image (Optional)"),
               const SizedBox(height: 10),
               GestureDetector(
                 onTap: _pickImage,
@@ -158,15 +155,15 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                   child: _imageFile != null
                       ? Image.file(_imageFile!, fit: BoxFit.cover)
-                      : const Column(
+                      : Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.camera_alt,
                               size: 40,
                               color: Colors.grey,
                             ),
-                            Text("Tap to select image"),
+                            Text(AppLanguage.current == 'TH' ? "แตะเพื่อเลือกรูปภาพ" : "Tap to select image"),
                           ],
                         ),
                 ),
@@ -178,13 +175,13 @@ class _ReportScreenState extends State<ReportScreen> {
                 child: ElevatedButton(
                   onPressed: _isSubmitting ? null : _submitReport,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFD700),
+                    backgroundColor: const Color(0xFFFFC107),
                   ),
                   child: _isSubmitting
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          "Submit Report",
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                      : Text(
+                          AppLanguage.current == 'TH' ? "ส่งรายงาน" : "Submit Report",
+                          style: const TextStyle(color: Colors.black, fontSize: 16),
                         ),
                 ),
               ),

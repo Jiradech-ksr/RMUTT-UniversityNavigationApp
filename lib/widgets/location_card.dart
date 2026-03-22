@@ -58,7 +58,7 @@ class LocationCard extends StatelessWidget {
               if (isFavorite)
                 const Icon(
                   Icons.star,
-                  color: Color(0xFFFFD700),
+                  color: Color(0xFFFFC107),
                 ),
             ],
           ),

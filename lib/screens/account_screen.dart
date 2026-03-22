@@ -30,8 +30,8 @@ class _AccountScreenState extends State<AccountScreen> {
     if (isGuest) {
       setState(() {
         _isGuest = true;
-        _name = "Guest User";
-        _email = "Not logged in";
+        _name = "Guest User"; // Kept to check backend, translated UI side
+        _email = "Not logged in"; // Translated UI side
         _photoUrl = "";
       });
     } else {
@@ -71,7 +71,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: Text(AppLanguage.current == 'TH' ? 'โปรไฟล์ของฉัน' : 'My Profile'),
       ), // Added AppBar for better navigation feel
       body: SingleChildScrollView(
         child: Center(
@@ -116,14 +116,14 @@ class _AccountScreenState extends State<AccountScreen> {
 
                 // --- NAME & EMAIL ---
                 Text(
-                  _name,
+                  _name == 'Guest User' && AppLanguage.current == 'TH' ? 'ผู้ใช้ทั่วไป' : _name,
                   style: Theme.of(
                     context,
                   ).textTheme.headlineSmall, // Uses Theme Style
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  _email,
+                  _email == 'Not logged in' && AppLanguage.current == 'TH' ? 'ยังไม่ได้เข้าสู่ระบบ' : _email,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium, // Uses Theme Style
@@ -171,7 +171,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 if (!_isGuest) ...[
                   ListTile(
                     leading: const Icon(Icons.bar_chart, color: Colors.indigo),
-                    title: const Text("My Statistics"),
+                    title: Text(AppLanguage.current == 'TH' ? "สถิติของฉัน" : "My Statistics"),
                     trailing: const Icon(Icons.chevron_right),
                     tileColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -196,7 +196,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     color: Colors.redAccent,
                   ),
                   title: Text(
-                    _isGuest ? 'Login' : 'Logout',
+                    _isGuest 
+                        ? (AppLanguage.current == 'TH' ? 'เข้าสู่ระบบ' : 'Login') 
+                        : (AppLanguage.current == 'TH' ? 'ออกจากระบบ' : 'Logout'),
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

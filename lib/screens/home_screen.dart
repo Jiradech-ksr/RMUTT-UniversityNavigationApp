@@ -3,6 +3,7 @@ import 'search_screen.dart';
 import 'history_screen.dart';
 import 'favorites_screen.dart';
 import 'account_screen.dart';
+import '../models/location_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,17 +47,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              label: 'History',
+              icon: const Icon(Icons.search), 
+              label: AppLanguage.current == 'TH' ? 'ค้นหา' : 'Search'
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Favorites',
+              icon: const Icon(Icons.history),
+              label: AppLanguage.current == 'TH' ? 'ประวัติ' : 'History',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.favorite),
+              label: AppLanguage.current == 'TH' ? 'รายการโปรด' : 'Favorites',
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person), 
+              label: AppLanguage.current == 'TH' ? 'บัญชี' : 'Account'
+            ),
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,

@@ -67,15 +67,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isGuest) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.lock_outline, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
+            const Icon(Icons.lock_outline, size: 64, color: Colors.grey),
+            const SizedBox(height: 16),
             Text(
-              "Login to save favorites",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              AppLanguage.current == 'TH' ? "เข้าสู่ระบบเพื่อบันทึกสถานที่โปรด" : "Login to save favorites",
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -83,7 +83,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Saved Locations')),
+      appBar: AppBar(title: Text(AppLanguage.current == 'TH' ? 'สถานที่ที่บันทึกไว้' : 'Saved Locations')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favorites.isEmpty
@@ -98,7 +98,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    "No favorites yet",
+                    AppLanguage.current == 'TH' ? "ยังไม่มีสถานที่โปรด" : "No favorites yet",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],

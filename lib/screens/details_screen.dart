@@ -146,8 +146,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ? (widget.location?.departmentNameTh ?? 'RMUTT')
         : (widget.location?.departmentNameEn ?? 'RMUTT');
     final String type = widget.location?.type ?? 'room';
+    String displayType = type;
+    if (AppLanguage.current == 'TH') {
+      if (type.toLowerCase() == 'room') displayType = 'ห้อง';
+      else if (type.toLowerCase() == 'building') displayType = 'อาคาร';
+      else if (type.toLowerCase() == 'department') displayType = 'หน่วยงาน';
+      else if (type.toLowerCase() == 'faculty') displayType = 'คณะ';
+    }
+
     final String floor = widget.location?.floor?.toString() ?? '-';
-    final String roomId = widget.location?.roomNumber ?? '-';
+    final String roomNumber = widget.location?.roomNumber ?? '-';
+    final String? details = widget.location?.details;
+    final String? responsibleEmail = widget.location?.responsibleEmail;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -195,13 +205,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ).textTheme.headlineSmall?.copyWith(fontSize: 28),
                   ),
                   const SizedBox(height: 16),
-                  _buildInfoRow('Department', buildingInfo),
+                  _buildInfoRow(AppLanguage.current == 'TH' ? 'คณะ/หน่วยงาน' : 'Department', buildingInfo),
                   const SizedBox(height: 8),
-                  _buildInfoRow('Type', type),
+                  _buildInfoRow(AppLanguage.current == 'TH' ? 'ประเภท' : 'Type', displayType),
                   const SizedBox(height: 8),
-                  _buildInfoRow('Floor', floor),
+                  _buildInfoRow(AppLanguage.current == 'TH' ? 'ชั้น' : 'Floor', floor),
                   const SizedBox(height: 8),
-                  _buildInfoRow('Room ID', roomId),
+                  _buildInfoRow(AppLanguage.current == 'TH' ? 'หมายเลขห้อง' : 'Room Number', roomNumber),
+                  if (details != null && details.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    _buildInfoRow(AppLanguage.current == 'TH' ? 'รายละเอียด' : 'Details', details),
+                  ],
+                  if (responsibleEmail != null && responsibleEmail.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    _buildEmailRow(responsibleEmail),
+                  ],
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -209,9 +227,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         child: ElevatedButton.icon(
                           onPressed: _onNavigatePressed,
                           icon: const Icon(Icons.navigation),
-                          label: const Text('Start Navigation'),
+                          label: Text(AppLanguage.current == 'TH' ? 'เริ่มนำทาง' : 'Start Navigation'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFFD700),
+                            backgroundColor: const Color(0xFFFFC107),
                             foregroundColor: Colors.black,
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
@@ -226,15 +244,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onPressed: _toggleFavorite,
                           icon: Icon(
                             isFavorite ? Icons.star : Icons.star_border,
-                            color: const Color(0xFFFFD700),
+                            color: const Color(0xFFFFC107),
                           ),
                           label: Text(
-                            isFavorite ? 'Saved' : 'Add to Favorites',
+                            isFavorite 
+                                ? (AppLanguage.current == 'TH' ? 'บันทึกแล้ว' : 'Saved') 
+                                : (AppLanguage.current == 'TH' ? 'เพิ่มลงรายการโปรด' : 'Add to Favorites'),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFFFFD700),
-                            side: const BorderSide(color: Color(0xFFFFD700)),
+                            foregroundColor: const Color(0xFFFFC107),
+                            side: const BorderSide(color: Color(0xFFFFC107)),
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -250,7 +270,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   // ส่วนแสดงผลแผนผังห้อง (Floor Layout)
                   // ==========================================
                   Text(
-                    'Floor Layout',
+                    AppLanguage.current == 'TH' ? 'แผนผังชั้น' : 'Floor Layout',
                     style: Theme.of(
                       context,
                     ).textTheme.headlineSmall?.copyWith(fontSize: 24),
@@ -282,10 +302,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                           )
-                        : const Center(
+                        : Center(
                             child: Text(
-                              'No Floor Layout Available',
-                              style: TextStyle(color: Colors.white70),
+                              AppLanguage.current == 'TH' ? 'ไม่มีแผนผังชั้น' : 'No Floor Layout Available',
+                              style: const TextStyle(color: Colors.white70),
                             ),
                           ),
                   ),
@@ -295,7 +315,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   // ส่วนแสดงผลรูปภาพสถานที่จริง (Images)
                   // ==========================================
                   Text(
-                    'Images',
+                    AppLanguage.current == 'TH' ? 'รูปภาพสถานที่' : 'Images',
                     style: Theme.of(
                       context,
                     ).textTheme.headlineSmall?.copyWith(fontSize: 24),
@@ -333,10 +353,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ],
                           )
-                        : const Center(
+                        : Center(
                             child: Text(
-                              "No gallery images available",
-                              style: TextStyle(color: Colors.white70),
+                              AppLanguage.current == 'TH' ? "ไม่มีรูปภาพ" : "No gallery images available",
+                              style: const TextStyle(color: Colors.white70),
                             ),
                           ),
                   ),
@@ -380,5 +400,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Widget _buildInfoRow(String label, String value) {
     return Text('$label : $value', style: const TextStyle(fontSize: 16));
+  }
+
+  Widget _buildEmailRow(String email) {
+    return Row(
+      children: [
+        const Icon(Icons.email_outlined, size: 18, color: Colors.blueAccent),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            'Email : $email',
+            style: const TextStyle(fontSize: 16, color: Colors.blueAccent),
+          ),
+        ),
+      ],
+    );
   }
 }

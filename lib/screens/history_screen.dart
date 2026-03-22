@@ -36,7 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     if (mounted) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("History cleared")));
+      ).showSnackBar(SnackBar(content: Text(AppLanguage.current == 'TH' ? "ล้างประวัติเรียบร้อยแล้ว" : "History cleared")));
     }
   }
 
@@ -44,33 +44,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Recent Places'),
+        title: Text(AppLanguage.current == 'TH' ? 'ประวัติการค้นหา' : 'Recent Places'),
         actions: [
           if (_history.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              tooltip: 'Clear History',
+              tooltip: AppLanguage.current == 'TH' ? 'ล้างประวัติ' : 'Clear History',
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text("Clear History"),
-                    content: const Text(
-                      "Are you sure you want to delete all history?",
+                    title: Text(AppLanguage.current == 'TH' ? "ล้างประวัติ" : "Clear History"),
+                    content: Text(
+                      AppLanguage.current == 'TH' ? "คุณแน่ใจหรือไม่ที่จะลบประวัติทั้งหมด?" : "Are you sure you want to delete all history?",
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx),
-                        child: const Text("Cancel"),
+                        child: Text(AppLanguage.current == 'TH' ? "ยกเลิก" : "Cancel"),
                       ),
                       TextButton(
                         onPressed: () {
                           Navigator.pop(ctx);
                           _clearHistory();
                         },
-                        child: const Text(
-                          "Clear",
-                          style: TextStyle(color: Colors.red),
+                        child: Text(
+                          AppLanguage.current == 'TH' ? "ล้าง" : "Clear",
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
                     ],
@@ -90,7 +90,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   Icon(Icons.history, size: 80, color: Colors.grey.shade300),
                   const SizedBox(height: 16),
                   Text(
-                    "No recent history",
+                    AppLanguage.current == 'TH' ? "ไม่มีประวัติการค้นหาล่าสุด" : "No recent history",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],

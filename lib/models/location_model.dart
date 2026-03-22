@@ -20,6 +20,8 @@ class Location {
   final int? floor;
   final String? floorLayoutUrl;
   final String? buildingImageUrl;
+  final String? details;
+  final String? responsibleEmail;
 
   Location({
     required this.id,
@@ -35,6 +37,8 @@ class Location {
     this.floor,
     this.floorLayoutUrl,
     this.buildingImageUrl,
+    this.details,
+    this.responsibleEmail,
   });
 
   // Smart getter that returns the correct language automatically
@@ -86,6 +90,8 @@ class Location {
           : null,
       floorLayoutUrl: fullLayoutUrl,
       buildingImageUrl: fullBuildingImageUrl,
+      details: json['details']?.toString(),
+      responsibleEmail: json['responsible_email']?.toString(),
     );
   }
 }
