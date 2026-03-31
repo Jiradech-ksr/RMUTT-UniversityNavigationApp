@@ -20,11 +20,15 @@ class _SearchScreenState extends State<SearchScreen> {
   String _searchQuery = "";
   String _nlpEntity = "";
   Timer? _debounce;
-
+  //สร้างคำขอหน่วงเวลา (debouncer) เมื่อผู้ใช้พิมพ์คำค้นหา โดยจะเรียกใช้ api/NLP/search.php
+  //เพื่อดึงเฉพาะส่วนเอนทิตีของผลลัพธ์ NLP และบันทึกไว้เป็น _nlpEntity
   Future<void> _fetchNlpEntity(String query) async {
     try {
-      final url = '${ApiConstants.baseUrl}/NLP/search.php?query=${Uri.encodeComponent(query)}';
-      final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 2));
+      final url =
+          '${ApiConstants.baseUrl}/NLP/search.php?query=${Uri.encodeComponent(query)}';
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 2));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data['entity'] != null && mounted) {
@@ -34,9 +38,10 @@ class _SearchScreenState extends State<SearchScreen> {
         }
       }
     } catch (_) {
-      // Fail silently, fallback to standard text search
+      // if fail, silently fallback to standard text search
     }
   }
+
   bool _isLoading = true;
   List<dynamic> _campusHierarchy = [];
 
@@ -99,14 +104,16 @@ class _SearchScreenState extends State<SearchScreen> {
     final roomNumber = data['room_number']?.toString().toLowerCase() ?? '';
     final searchLower = query.toLowerCase();
 
-    // Search in both English and Thai!
+    // in 109 - 117 & 197 - 223
+    //แก้ไขลูปตัวกรองการค้นหาในพื้นที่ หาก _nlpEntity ไม่ว่างเปล่า จะตรวจสอบว่ามีชื่ออาคาร/ห้องใดในภาษาไทยหรือภาษาอังกฤษที่ตรงกับเอนทิตีที่ NLP รู้จักหรือไม่
+    // โดยจะบังคับให้แสดงผลลัพธ์เหล่านั้น แม้ว่าข้อความค้นหาของผู้ใช้จะไม่ตรงกับชื่อเหล่านั้นอย่างเคร่งครัดก็ตาม
     if (titleEn.contains(searchLower) ||
         titleTh.contains(searchLower) ||
         roomNumber.contains(searchLower) ||
-        (_nlpEntity.isNotEmpty && 
-         (titleEn.contains(_nlpEntity) || 
-          titleTh.contains(_nlpEntity) || 
-          roomNumber.contains(_nlpEntity)))) {
+        (_nlpEntity.isNotEmpty &&
+            (titleEn.contains(_nlpEntity) ||
+                titleTh.contains(_nlpEntity) ||
+                roomNumber.contains(_nlpEntity)))) {
       return true;
     }
     if (data.containsKey('children')) {
@@ -122,7 +129,11 @@ class _SearchScreenState extends State<SearchScreen> {
     // We use Safe Area and a Column structure
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLanguage.current == 'TH' ? 'แผนที่นำทางมหาวิทยาลัย' : 'Campus Navigator'),
+        title: Text(
+          AppLanguage.current == 'TH'
+              ? 'แผนที่นำทางมหาวิทยาลัย'
+              : 'Campus Navigator',
+        ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(70),
           child: Padding(
@@ -140,7 +151,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 });
               },
               decoration: InputDecoration(
-                hintText: AppLanguage.current == 'TH' ? 'ค้นหาอาคาร, ห้อง...' : 'Search Buildings, Rooms...',
+                hintText: AppLanguage.current == 'TH'
+                    ? 'ค้นหาอาคาร, ห้อง...'
+                    : 'Search Buildings, Rooms...',
                 prefixIcon: const Icon(Icons.search),
               ),
             ),
@@ -150,7 +163,11 @@ class _SearchScreenState extends State<SearchScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _campusHierarchy.isEmpty
-          ? Center(child: Text(AppLanguage.current == 'TH' ? "ไม่พบข้อมูล" : "No data found"))
+          ? Center(
+              child: Text(
+                AppLanguage.current == 'TH' ? "ไม่พบข้อมูล" : "No data found",
+              ),
+            )
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: _campusHierarchy.length,
@@ -193,9 +210,18 @@ class _SearchScreenState extends State<SearchScreen> {
                 ) ??
                 false) ||
             (_nlpEntity.isNotEmpty &&
-                ((data['title_en']?.toString().toLowerCase().contains(_nlpEntity) ?? false) ||
-                 (data['title_th']?.toString().toLowerCase().contains(_nlpEntity) ?? false) ||
-                 (data['room_number']?.toString().toLowerCase().contains(_nlpEntity) ?? false))));
+                ((data['title_en']?.toString().toLowerCase().contains(
+                          _nlpEntity,
+                        ) ??
+                        false) ||
+                    (data['title_th']?.toString().toLowerCase().contains(
+                          _nlpEntity,
+                        ) ??
+                        false) ||
+                    (data['room_number']?.toString().toLowerCase().contains(
+                          _nlpEntity,
+                        ) ??
+                        false))));
 
     bool shouldShow =
         _searchQuery.isEmpty ||
@@ -209,7 +235,7 @@ class _SearchScreenState extends State<SearchScreen> {
     // --- ROOM STYLE ---
     if (data['type'] == 'room') {
       return Padding(
-        padding: const EdgeInsets.only(left: 16, bottom: 12),
+        padding: EdgeInsets.only(left: depth == 0 ? 0.0 : 16.0, bottom: 12),
         child: ListTile(
           tileColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -278,7 +304,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Container(
       margin: EdgeInsets.only(
         bottom: 12,
-        left: data['type'] == 'department' ? 16.0 : 0.0,
+        left: depth == 0 ? 0.0 : 16.0,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -331,7 +357,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               )
             : null,
-        childrenPadding: const EdgeInsets.all(8),
+        childrenPadding: EdgeInsets.zero,
         children: (data['children'] as List<dynamic>).map<Widget>((child) {
           return _buildTreeItem(
             child,

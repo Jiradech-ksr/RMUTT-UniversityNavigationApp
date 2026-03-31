@@ -7,21 +7,21 @@ class AppLanguage {
 }
 
 class Location {
-  final int id;
-  final String nameEn;
-  final String nameTh;
-  final String type;
-  final double latitude;
-  final double longitude;
-  final String? departmentNameEn;
-  final String? departmentNameTh;
-  final String? imageUrl;
-  final String? roomNumber;
-  final int? floor;
-  final String? floorLayoutUrl;
-  final String? buildingImageUrl;
-  final String? details;
-  final String? responsibleEmail;
+  final int id; // ไอดีของสถานที่ (Identifier)
+  final String nameEn; // ชื่อสถานที่ (ภาษาอังกฤษ)
+  final String nameTh; // ชื่อสถานที่ (ภาษาไทย)
+  final String type; // ประเภทของสถานที่ (เช่น อาคาร, ห้อง)
+  final double latitude; // พิกัดละติจูด (Latitude) แนวนอน
+  final double longitude; // พิกัดลองจิจูด (Longitude) แนวตั้ง
+  final String? departmentNameEn; // ชื่อคณะหรือภาควิชา (ภาษาอังกฤษ)
+  final String? departmentNameTh; // ชื่อคณะหรือภาควิชา (ภาษาไทย)
+  final String? imageUrl; // ลิงก์รูปภาพของสถานที่หรือห้อง
+  final String? roomNumber; // หมายเลขห้อง (สำหรับห้อง)
+  final int? floor; // ชั้นของอาคาร
+  final String? floorLayoutUrl; // ลิงก์รูปภาพแผนผังชั้น
+  final String? buildingImageUrl; // ลิงก์รูปภาพอาคารโดยรวม
+  final String? details; // รายละเอียดเพิ่มเติมของสถานที่
+  final String? responsibleEmail; // อีเมลของผู้รับผิดชอบสถานที่นี้
 
   Location({
     required this.id,

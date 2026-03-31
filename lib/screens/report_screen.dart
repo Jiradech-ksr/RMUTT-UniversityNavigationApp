@@ -132,7 +132,9 @@ class _ReportScreenState extends State<ReportScreen> {
               Text(AppLanguage.current == 'TH' ? "รายละเอียด" : "Description"),
               TextFormField(
                 controller: _descController,
-                maxLines: 3,
+                maxLength: 500,
+                maxLines: 5,
+                minLines: 3,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   hintText: AppLanguage.current == 'TH' ? "อธิบายปัญหา..." : "Describe the problem...",
